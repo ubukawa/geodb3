@@ -24,8 +24,12 @@
             [6,35,22]
             [6,35,23]
         ]
-        }
+    }
     ogr2ogrPath: ogr2ogr
     tippecanoePath: /usr/local/bin/tippecanoe
     dstDir: zxy
+    concurrent: 3
+    maxRetries: 3
+    retryDelay: 500
+    mbtilesDir: mbtiles
 }
