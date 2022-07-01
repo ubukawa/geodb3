@@ -1,0 +1,26 @@
+{
+  "name": "data",
+  "version": "1.0.0",
+  "description": "import esri geodatabase -test3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ubukawa/geodb3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ubukawa/geodb3/issues"
+  },
+  "homepage": "https://github.com/ubukawa/geodb3#readme",
+  "dependencies": {
+    "@mapbox/tilebelt": "^1.0.2",
+    "config": "^3.3.7",
+    "hjson": "^3.2.2",
+    "json-text-sequence": "^1.0.1"
+  }
+}

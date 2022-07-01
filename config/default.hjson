@@ -1,0 +1,31 @@
+{
+    minzoom: 10
+    maxzoom: 12
+    srcdb:  {
+        url: test_area_z6.gdb
+        layer: elev
+        minzoom: 10
+        maxzoom: 13
+        tiles: [
+            [6,32,20]
+            [6,32,21]
+            [6,32,22]
+            [6,32,23]
+            [6,33,20]
+            [6,33,21]
+            [6,33,22]
+            [6,33,23]
+            [6,34,20]
+            [6,34,21]
+            [6,34,22]
+            [6,34,23]
+            [6,35,20]
+            [6,35,21]
+            [6,35,22]
+            [6,35,23]
+        ]
+        }
+    ogr2ogrPath: ogr2ogr
+    tippecanoePath: /usr/local/bin/tippecanoe
+    dstDir: zxy
+}
