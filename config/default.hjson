@@ -32,4 +32,5 @@
     maxRetries: 3
     retryDelay: 500
     mbtilesDir: mbtiles
+    spinnerString: 15
 }

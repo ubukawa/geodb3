@@ -33,53 +33,12 @@ const iso = () => {
     return (new Date()).toISOString()
 }
 
-const dumpAndModify = async (bbox, downstream, moduleKey) => {
-    return new Promise((resolve, reject) => {
-        const startTime = new Date()
-        const database = srcdb.url //geodatabase location
-        console.log(`${startTime}: ${moduleKey} starts!!`)
-        const parser = new Parser()
-            .on('data', f => {
-                f.tippecanoe = {
-                    layer: srcdb.layer,
-                    minzoom: srcdb.minzoom,
-                    maxzoom: srcdb.maxzoom
-                }
-                delete f.properties.SHAPE_Length
-                downstream.write(`\x1e${JSON.stringify(f)}\n`)
-            })
-            .on('finish', () => {
-                downstream.end()
-            })
-        const ogr2ogr = spawn(org2ogrPath, [
-            '-f', 'GeoJSONSeq', 
-            '-lco', 'RS=YES',
-            '/vsistdout/',
-            database,
-            `-clipdst ${bbox[0]} ${bbox[1]} ${bbox[2]} ${bbox[3]}`
-        ])
-
-        ogr2ogr.stdout.pipe(parser)
-
-    }
-
-    )
-
-}
-
-
-
-const sleep = (wait) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => { resolve() }, wait)
-    })
-}
 
 const queue = new Queue(async (t, cb) => {
     const startTime = new Date()
     const moduleKey = t.moduleKey
     const [z, x, y] = t.tile
-    const queueStats = queue.getStats()
+    const gueueStats = queue.getStats()
     const bbox = tilebelt.tileToBBOX([x, y, z])
     const tmpPath = `${mbtilesDir}/part-${z}-${x}-${y}.mbtiles`
     const dstPath = `${mbtilesDir}/${z}-${x}-${y}.mbtiles`
@@ -96,7 +55,7 @@ const queue = new Queue(async (t, cb) => {
         '--drop-rate=1',
         `--minimum-zoom=${minzoom}`,
         `--maximum-zoom=${maxzoom}`,
-        `--output=${tmpPath}`
+        `output=${tmpPath}`
     ],{ stdio: ['pipe', 'inherit', 'inherit']})
     tippecanoe.on('exit', () => {
         fs.renameSync(tmpPath, dstPath)
@@ -111,24 +70,20 @@ const queue = new Queue(async (t, cb) => {
         }
         return cb()
     })
+  
+    console.log(`${moduleKey}: ${iso()}, BBOX ${bbox} at ${dstPath}`)
 
-    productionSpinner.start()
-    while(!isIdle()) {
-        await sleep(5000)
-    }
-    try {
-        await dumpAndModify(bbox, tippecanoe.stdin, moduleKey)
-    } catch (e) {
-        cb(true)
-    }
+    
+    
 
-    tippecanoe.stdin.end()
-    //console.log(`${moduleKey}: ${iso()}, BBOX ${bbox} at ${dstPath}`)
+//    return cb()
+
 },{
     concurrent: config.get('concurrent'), 
     maxRetries: config.get('maxRetries'),
     retryDelay: config.get('retryDelay') 
-  })
+  }
+    )
 
 const queueTask = () => {
     for (let tile of srcdb.tiles){
