@@ -33,19 +33,6 @@ const iso = () => {
     return (new Date()).toISOString()
 }
 
-const noPressureWrite = (downstream, f) => {
-    return new Promise((res) => {
-        if (downstream.write(`\x1e${JSON.stringify(f)}\n`)){
-            res()
-        } else {
-            downstream.once('drain', () => {
-                res()
-            })
-        }
-    })
-}
-
-//I will add fetche and modify dumpAndModify
 
 
 const dumpAndModify = async (bbox, downstream, moduleKey) => {

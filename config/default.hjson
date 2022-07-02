@@ -2,7 +2,7 @@
     minzoom: 10
     maxzoom: 12
     srcdb:  {
-        url: test_area_z6.gdb
+        url: test_area.gdb
         layer: elev
         minzoom: 10
         maxzoom: 13
