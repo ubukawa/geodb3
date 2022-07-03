@@ -16,7 +16,8 @@ const tippecanoe = spawn(tippecanoePath, [
     `--maximum-zoom=${maxzoom}`
 ], { stdio: ['pipe', 'inherit', 'inherit']})
 
-const downstream = tippecanoe.stdin
+//const downstream = tippecanoe.stdin
+const downstream = process.stdout
 
 const parser = new Parser()
     .on('data', f => {
@@ -36,7 +37,7 @@ const ogr2ogr = spawn(ogr2ogrPath,[
     '-f', 'GeoJSONSeq', 
     '-lco', 'RS=YES',
     '/vsistdout/',
-    srcdb.url, 't_6_32_20'
+    srcdb.url
 ])
 
 ogr2ogr.stdout.pipe(parser)
