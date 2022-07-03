@@ -1,4 +1,4 @@
-// test001 -stdout single file
+// test002 -tippecanoe
 const config = require('config')
 const Parser = require('json-text-sequence').parser
 const { spawn } = require('child_process')
@@ -11,14 +11,15 @@ const ogr2ogrPath = config.get('ogr2ogrPath')
 const tippecanoePath = config.get('tippecanoePath')
 const mbtilesDir = config.get('mbtilesDir')
 
+
 const tippecanoe = spawn(tippecanoePath, [
-    '--output=test321.mbtiles',
+    '--output=test123.mbtiles',
     `--minimum-zoom=${minzoom}`,
     `--maximum-zoom=${maxzoom}`
 ], { stdio: ['pipe', 'inherit', 'inherit']})
 
-//const downstream = tippecanoe.stdin
-const downstream = process.stdout
+const downstream = tippecanoe.stdin
+//const downstream = process.stdout
 
 const parser = new Parser()
     .on('data', f => {
@@ -28,8 +29,8 @@ const parser = new Parser()
             maxzoom: srcdb.maxzoom
         }
         delete f.properties.SHAPE_Length
-        //downstream.write(`\x1e${JSON.stringify(f)}\n`)
-        downstream.write(`\x1e${JSON.stringify(f.properties)}\n`)
+        downstream.write(`\x1e${JSON.stringify(f)}\n`)
+        //downstream.write(`\x1e${JSON.stringify(f.properties)}\n`)
     }) 
     .on('finish', () => {
         downstream.end()
@@ -44,5 +45,5 @@ const ogr2ogr = spawn(ogr2ogrPath,[
 ])
 
 ogr2ogr.stdout.pipe(parser)
-
+//console.log('(^_^)/')
 
