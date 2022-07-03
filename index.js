@@ -73,12 +73,7 @@ const dumpAndModify = async (bbox, downstream, moduleKey) => {
             database
             //`-clipdst ${bbox[0]} ${bbox[1]} ${bbox[2]} ${bbox[3]}`
         ])
-
-        try {
             ogr2ogr.stdout.pipe(parser)
-        } catch (e) {
-            reject(e)
-        }
         release()
         resolve()
         //ogr2ogr.stdout.pipe(parser)
