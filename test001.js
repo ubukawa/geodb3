@@ -11,12 +11,13 @@ const ogr2ogrPath = config.get('ogr2ogrPath')
 const tippecanoePath = config.get('tippecanoePath')
 const mbtilesDir = config.get('mbtilesDir')
 
+/*
 const tippecanoe = spawn(tippecanoePath, [
     '--output=test321.mbtiles',
     `--minimum-zoom=${minzoom}`,
     `--maximum-zoom=${maxzoom}`
 ], { stdio: ['pipe', 'inherit', 'inherit']})
-
+*/
 //const downstream = tippecanoe.stdin
 const downstream = process.stdout
 
