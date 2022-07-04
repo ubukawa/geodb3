@@ -108,8 +108,7 @@ const dumpAndModify = async (bbox, downstream, moduleKey) => {
             //.on('finish', () => {
             //      downstream.end()
             //})
-            //.on('finish', async() => {
-            .on('exit', async() => {
+            .on('finish', async() => {
                 for (f of features) {
                     try{
                         await noPressureWrite(downstream, f)
