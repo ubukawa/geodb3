@@ -117,7 +117,8 @@ const dumpAndModify = async (bbox, downstream, moduleKey) => {
                         reject(e)
                     }
                 }
-                resolve(count)
+                console.log(`${moduleKey}: ${iso(startTime)} --> ${iso()}`)
+                resolve()
             })          
         const ogr2ogr = spawn(ogr2ogrPath,[
             '-f', 'GeoJSONSeq', 
@@ -135,8 +136,7 @@ const dumpAndModify = async (bbox, downstream, moduleKey) => {
         //} catch (e) {
         //    reject(e)
         //}        
-        console.log(`${moduleKey}: ${iso(startTime)} --> ${iso()}`)
-        resolve()
+        //resolve()
     })
 }
 
