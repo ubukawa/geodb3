@@ -47,22 +47,12 @@ const noPressureWrite = (downstream, f) => {
         }
     })
 }
-
+/* This time, fetch is not used...
 const fetch = (ogr2ogr, moduleKey, downstream) => {
     return new Promise((resolve, reject) => {
         let count = 0
-        let features = []        
-        
-            
-    })
-}
-
-const dumpAndModify = async (bbox, downstream, moduleKey) => {
-    return new Promise((resolve, reject) => {
-        const startTime = new Date()
-        let count = 0
-        let features = []   
-        const parser = new Parser()
+        let features = []
+        parser()
             .on('data', f => {
                 f.tippecanoe = {
                     layer: srcdb.layer,
@@ -82,6 +72,44 @@ const dumpAndModify = async (bbox, downstream, moduleKey) => {
             //      downstream.end()
             //})
             .on('finish', async() => {
+                for (f of features) {
+                    try{
+                        await noPressureWrite(downstream, f)
+                    } catch (e) {
+                        reject(e)
+                    }
+                }
+                resolve(count)
+            })              
+    })
+}
+*/
+
+const dumpAndModify = async (bbox, downstream, moduleKey) => {
+    return new Promise((resolve, reject) => {
+        const startTime = new Date()
+        let count = 0
+        let features = []   
+        const parser = new Parser()
+            .on('data', f => {
+                f.tippecanoe = {
+                    layer: srcdb.layer,
+                    minzoom: srcdb.minzoom,
+                    maxzoom: srcdb.maxzoom
+                }
+                count++
+                delete f.properties.SHAPE_Length //to be expanded as modify.js
+                //downstream.write(`\x1e${JSON.stringify(f)}\n`)
+                if (f) features.push(f) //adding f to features
+            })
+            .on('error', err => {
+                console.error(err.stack)
+            }) 
+            //.on('finish', () => {
+            //      downstream.end()
+            //})
+            //.on('finish', async() => {
+            .on('exit', async() => {
                 for (f of features) {
                     try{
                         await noPressureWrite(downstream, f)
