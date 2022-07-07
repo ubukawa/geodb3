@@ -1,4 +1,4 @@
-//for a single gdb, this works well
+// Three process at once
 const config = require('config')
 const { spawn } = require('child_process')
 const Parser = require('json-text-sequence').parser
@@ -11,15 +11,17 @@ const minzoom = config.get('minzoom')
 const maxzoom = config.get('maxzoom')
 
 
+for (let source of ['bndl','bndl2','bndl3']){
+
 const tippecanoe = spawn(tippecanoePath, [
-    '--output=test3210.mbtiles',
+    `--output=${source}.mbtiles`,
     '--force',
     `--minimum-zoom=${minzoom}`,
     `--maximum-zoom=${maxzoom}`
 ], { stdio: ['pipe', 'inherit', 'inherit']})
    .on('exit', () => {
     let nowTime = new Date()
-    console.log(`Tippecanoe ends at ${nowTime}:\n${srcdb.url}`)
+    console.log(`${source}: Tippecanoe ends at ${nowTime}:\n`)
     })
 
 
@@ -47,14 +49,14 @@ var ogr2ogr = spawn(ogr2ogrPath, [
     '/vsistdout/',
 //    '-clipdst', 0, 52.4827, 5.625, 55.76573,
 //    srcdb.url
-     'small-data/bndl.geojson'
+     `small-data/${source}.geojson`
 ])
 ogr2ogr.on('exit', () => {
     let nowTime = new Date()
-    console.log(`GDAL reading ends at ${nowTime}:\n${srcdb.url}`)
+    console.log(`${source}: GDAL reading ends at ${nowTime}:\n`)
 })
 
 ogr2ogr.stdout.pipe(parser)
 
-
+}
 

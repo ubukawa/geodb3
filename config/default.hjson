@@ -1,11 +1,11 @@
 {
-    minzoom: 10
-    maxzoom: 12
+    minzoom: 1
+    maxzoom: 5
     srcdb:  {
         url: test_area.gdb
         layer: elev
         minzoom: 1
-        maxzoom: 3
+        maxzoom: 6
         tiles: [
             [6,32,20]
             [6,32,21]
