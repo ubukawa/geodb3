@@ -1,17 +1,13 @@
-//const { spawn } = require('child_process')
-const cp = require('child_process')
+const { spawn } = require('child_process')
+//const cp = require('child_process')
 const config = require('config')
 const srcdb = config.get('srcdb')
 
-var progs = {
-    list: 'ls',
-    copy: 'cp',
-    mkdir: 'mkdir'
-}
-
 const ogr2ogrPath = config.get('ogr2ogrPath')
 
-var child = cp.spawn(ogr2ogrPath, [
+ 
+
+var child = spawn(ogr2ogrPath, [
     '-f', 'GeoJSONSeq',
     '-lco', 'RS=YES',
     '/vsistdout/',
@@ -20,7 +16,7 @@ var child = cp.spawn(ogr2ogrPath, [
      'small-data/bndl.geojson'
 ])
 child.stdout.on('data', (data) => {
-   // console.log(`data:\n${data}`)
+    console.log(`data:\n${data}`)
 })
 child.on('exit', () => {
     console.log(`end:\n${srcdb.url}`)
