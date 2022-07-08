@@ -2,6 +2,7 @@ const Queue = require('better-queue')
 
 let keyInProgress = []
 
+
 const sleep = (wait) => {
     return new Promise((resolve, reject) => {
         setTimeout( () => {resolve()}, wait)
@@ -13,14 +14,14 @@ const queue = new Queue(async (t, cb) => {
     const key = t.key
 
     keyInProgress.push(key)
-    console.log(`${keyInProgress} on process`)
-    await sleep(5000)
+    console.log(`[${keyInProgress}] in progress`)
+    await sleep(1000)
     const endTime = new Date()
-    console.log(`${key} ends: ${startTime} --> ${endTime} (^o^)/`)
+    console.log(`${key} ends: ${startTime.toISOString()} --> ${endTime.toISOString()} (^o^)/`)
     keyInProgress = keyInProgress.filter((v) => !(v === key))
     return cb()
 },{
-    concurrent: 3,
+    concurrent: 2,
     maxRetries: 3,
     retryDelay: 5000
 })
